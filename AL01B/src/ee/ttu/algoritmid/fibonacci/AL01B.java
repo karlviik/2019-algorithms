@@ -34,7 +34,7 @@ public class AL01B {
     long measureTime = System.nanoTime() - measureStart;
     long lineTime = measureTime / (3 * 89 - 2); // 3 * F(10) - 2
     BigInteger lineCount = iterativeF(n).multiply(BigInteger.valueOf(3)).subtract(BigInteger.valueOf(2));
-    return BigDecimal.valueOf(lineTime).multiply(new BigDecimal(lineCount)).divide(BigDecimal.valueOf(100000000.0 * 60 * 60 * 24 * 365), 18, RoundingMode.UP).toString();
+    return BigDecimal.valueOf(lineTime).multiply(new BigDecimal(lineCount)).divide(BigDecimal.valueOf(1000000000.0 * 60 * 60 * 24 * 365), 18, RoundingMode.UP).toString();
   }
 
   /**
