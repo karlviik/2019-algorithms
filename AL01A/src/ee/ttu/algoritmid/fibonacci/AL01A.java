@@ -1,5 +1,7 @@
 package ee.ttu.algoritmid.fibonacci;
 
+import java.math.BigInteger;
+
 public class AL01A {
 
   /**
@@ -8,11 +10,14 @@ public class AL01A {
    * @return The n-th number in Fibonacci series.
    */
   public String iterativeF(int n) {
-    int a = 0;
-    int b = 1;
-    int c = 0;
+    if (n < 0) {
+      return "";
+    }
+    BigInteger a = BigInteger.ZERO;
+    BigInteger b = BigInteger.ONE;
+    BigInteger c = BigInteger.ZERO;
     for (int i = 1; i <= n; i++) {
-      c = a + b;
+      c = a.add(b);
       a = b;
       b = c;
     }
