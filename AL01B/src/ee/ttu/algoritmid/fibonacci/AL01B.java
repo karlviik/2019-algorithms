@@ -4,11 +4,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
-import static java.lang.System.nanoTime;
-
 public class AL01B {
 
-  public static BigInteger iterativeF(int n) {
+  public BigInteger iterativeF(int n) {
     if (n <= 1) {
       return BigInteger.valueOf(n);
     }
@@ -28,11 +26,10 @@ public class AL01B {
    * @param n The n-th number to compute.
    * @return The time estimate or exact time in YEARS.
    */
-  public static String timeToComputeRecursiveFibonacci(int n) {
+  public String timeToComputeRecursiveFibonacci(int n) {
     long measureStart = System.nanoTime();
     recursiveF(12);
     long measureTime = System.nanoTime() - measureStart;
-    System.out.println(measureTime);
     long lineTime = measureTime / (40 * 144 - 2); // 3 * F(N) - 2 edited
     BigInteger lineCount = iterativeF(n).multiply(BigInteger.valueOf(3)).subtract(BigInteger.valueOf(2));
     return BigDecimal.valueOf(lineTime).multiply(new BigDecimal(lineCount)).divide(BigDecimal.valueOf(1000000000.0 * 60 * 60 * 24 * 365), 18, RoundingMode.DOWN).toString();
@@ -44,13 +41,9 @@ public class AL01B {
    * @param n The n-th number to compute.
    * @return The n-th Fibonacci number as a string.
    */
-  public static BigInteger recursiveF(int n) {
+  public BigInteger recursiveF(int n) {
     if (n <= 1)
       return BigInteger.valueOf(n);
     return recursiveF(n - 1).add(recursiveF(n - 2));
-  }
-
-  public static void main(String[] args) {
-    System.out.println(timeToComputeRecursiveFibonacci(69));
   }
 }
