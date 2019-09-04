@@ -10,17 +10,17 @@ public class AL01A {
    * @return The n-th number in Fibonacci series.
    */
   public String iterativeF(int n) {
-    if (n < 0) {
-      return "";
+    if (n <= 1) {
+      return String.valueOf(n);
     }
-    BigInteger a = BigInteger.ZERO;
+    BigInteger a = BigInteger.ONE;
     BigInteger b = BigInteger.ONE;
-    BigInteger c = BigInteger.ZERO;
-    for (int i = 1; i <= n; i++) {
+    BigInteger c = BigInteger.ONE;
+    for (int i = 2; i <= n; i++) {
       c = a.add(b);
       a = b;
       b = c;
     }
-    return String.valueOf(c);
+    return c.toString();
   }
 }
