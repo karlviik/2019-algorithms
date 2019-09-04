@@ -32,7 +32,7 @@ public class AL01B {
     long measureStart = System.nanoTime();
     recursiveF(12);
     long measureTime = System.nanoTime() - measureStart;
-    long lineTime = measureTime / (3 * 89 - 2 + 89); // 3 * F(10) - 2
+    long lineTime = measureTime / (5 * 89 - 2); // 3 * F(10) - 2
     BigInteger lineCount = iterativeF(n).multiply(BigInteger.valueOf(3)).subtract(BigInteger.valueOf(2));
     return BigDecimal.valueOf(lineTime).multiply(new BigDecimal(lineCount)).divide(BigDecimal.valueOf(10000000000.0 * 60 * 60 * 24 * 365), 18, RoundingMode.DOWN).toString();
   }
