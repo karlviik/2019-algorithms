@@ -8,7 +8,14 @@ public class AL01A {
    * @return The n-th number in Fibonacci series.
    */
   public String iterativeF(int n) {
-    // TODO
-    return "";
+    int a = 0;
+    int b = 1;
+    int c = 0;
+    for (int i = 1; i <= n; i++) {
+      c = a + b;
+      a = b;
+      b = c;
+    }
+    return String.valueOf(c);
   }
 }
