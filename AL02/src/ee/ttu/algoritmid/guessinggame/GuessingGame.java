@@ -14,7 +14,7 @@ public class GuessingGame {
   }
 
   /**
-   * @param cityArray - All the possible cities.
+   * @param cityArray - All the possible cities..
    * @return the name of the city.
    */
   public String play(City[] cityArray) {
