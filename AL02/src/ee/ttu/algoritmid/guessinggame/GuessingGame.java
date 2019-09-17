@@ -20,10 +20,10 @@ public class GuessingGame {
   public String play(City[] cityArray) {
     ArrayList<City> sortedCities = List.of(cityArray).stream().sorted(Comparator.comparing(City::getPopulation)).collect(Collectors.toCollection(ArrayList::new));
     int questionThis = sortedCities.size() / 2;
-    int diff = questionThis;
+    double diff = questionThis;
     while (true) {
       String answer = oracle.isIt(sortedCities.get(questionThis));
-      diff /= 2;
+      diff = (Math.ceil(diff/ 2.0));
       if (diff == 0) {
         diff = 1;
       }
