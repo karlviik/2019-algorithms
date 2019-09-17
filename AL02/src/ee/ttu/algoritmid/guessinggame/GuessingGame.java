@@ -24,8 +24,8 @@ public class GuessingGame {
     while (true) {
       String answer = oracle.isIt(sortedCities.get(questionThis));
       diff = (Math.ceil(diff/ 2.0));
-      if (diff == 0) {
-        diff = 1;
+      if (diff >=sortedCities.size()) {
+        diff = sortedCities.size() - 1;
       }
       if (answer.equals("higher population")) {
         questionThis += diff;
