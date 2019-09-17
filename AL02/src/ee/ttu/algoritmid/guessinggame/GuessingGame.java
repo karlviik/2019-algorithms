@@ -31,8 +31,8 @@ public class GuessingGame {
       } else {
         return sortedCities.get(questionThis).getName();
       }
-      if (diff >=sortedCities.size()) {
-        diff = sortedCities.size() - 1;
+      if (questionThis >=sortedCities.size()) {
+        questionThis = sortedCities.size() - 1;
       }
     }
   }
