@@ -1,7 +1,5 @@
 package ee.ttu.algoritmid.dancers;
 
-import javax.print.DocFlavor;
-
 public class DancerImpl implements Dancer {
 
   private String name;

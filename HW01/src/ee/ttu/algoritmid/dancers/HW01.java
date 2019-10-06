@@ -10,9 +10,7 @@ public class HW01 implements Dancers {
   public BinaryTree femaleTree = new BinaryTree();
   public BinaryTree maleTree = new BinaryTree();
 
-  public HW01() {
-  }
-
+  public HW01() { }
 
   @Override
   public DancingCouple findPartnerFor(Dancer dancer) throws IllegalArgumentException {

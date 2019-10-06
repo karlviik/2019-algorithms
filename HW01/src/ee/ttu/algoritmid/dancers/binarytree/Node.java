@@ -15,7 +15,7 @@ public class Node {
   Node right;
   Node parent;
 
-  public Node(int value, Node parent) {
+  Node(int value, Node parent) {
     this.value = value;
     this.dancers = new ArrayList<>();
     this.parent = parent;
@@ -34,7 +34,7 @@ public class Node {
       right.printTree(new StringBuilder().append(prefix).append(isTail ? "│   " : "    "), false, sb);
     }
 
-    sb.append(prefix).append(isTail ? "└── " : "┌── ").append(value + " " + leftHeight + " " + rightHeight + " " + dancers.toString() + ((parent == null) ? "null" : parent.value)).append("\n");
+    sb.append(prefix).append(isTail ? "└── " : "┌── ").append(value).append("\n");
 
     if(left != null) {
       left.printTree(new StringBuilder().append(prefix).append(isTail ? "    " : "│   "), true, sb);
