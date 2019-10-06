@@ -666,10 +666,11 @@ public class BinaryTree {
 
     for (int i = 0; i < requests.size(); i++) {
       testRequestResponse(solution, requests.get(i), responds.get(i));
-      System.out.println(solution.femaleTree.toString());
-      System.out.println(solution.maleTree.toString());
-      System.out.println("I asked for partner to " + requests.get(i));
-      System.out.println("I expected " + responds.get(i));
+//      System.out.println(solution.femaleTree.toString());
+//      System.out.println(solution.maleTree.toString());
+//      System.out.println("I asked for partner to " + requests.get(i));
+//      System.out.println("I expected " + responds.get(i));
+      System.out.println(solution.returnWaitingList());
       System.out.println("-------------------------------------------------------------------------");
     }
 

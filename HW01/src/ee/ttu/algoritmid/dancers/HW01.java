@@ -60,7 +60,7 @@ public class HW01 implements Dancers {
     List<Dancer> combinedList = new ArrayList<>();
     while (malesLeft || femalesLeft) {
       if (femalesLeft && malesLeft) {
-        if (femaleDancers.get(femaleCounter).getHeight() >= maleDancers.get(maleCounter).getHeight()) {
+        if (femaleDancers.get(femaleCounter).getHeight() <= maleDancers.get(maleCounter).getHeight()) {
           combinedList.add(femaleDancers.get(femaleCounter));
           femaleCounter++;
           if (femaleCounter == femaleDancers.size()) {
