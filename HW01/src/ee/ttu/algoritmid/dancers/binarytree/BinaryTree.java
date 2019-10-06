@@ -6,6 +6,7 @@ import ee.ttu.algoritmid.dancers.DancingCouple;
 import ee.ttu.algoritmid.dancers.HW01;
 
 import javax.swing.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,6 +85,10 @@ public class BinaryTree {
   }
 
   private void childCallsForHeightDecrement(Node child) {
+    if (child != null && child.parent != null && child.parent.value == 155) {
+      System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+      System.out.println(balancePoint);
+    }
     if (child.parent != null) {
       if (child.parent.left == child) {
         child.parent.leftHeight--;
@@ -99,6 +104,10 @@ public class BinaryTree {
       if (Math.abs(child.parent.leftHeight - child.parent.rightHeight) > 1 && balancePoint == null) {
         balancePoint = child.parent;
       }
+      if (child != null && child.parent != null && child.parent.value == 155 && balancePoint != null) {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        System.out.println(balancePoint.value);
+      }
     }
   }
 
@@ -106,7 +115,7 @@ public class BinaryTree {
     if (nodeToDelete.left == null || nodeToDelete.right == null) {
       childCallsForHeightDecrement(nodeToDelete);
       deleteOneChildOrChildlessNode(nodeToDelete);
-      if (nodeToDelete.parent == null) {
+      if (root == nodeToDelete) {
         root = null;
       }
     } else {
@@ -172,6 +181,14 @@ public class BinaryTree {
           nodeToDelete.parent.right = null;
         }
 //        nodeToDelete.parent.rightHeight--;
+      }
+    }
+    else {
+      if (nodeToDelete.left != null) {
+        root = nodeToDelete.left;
+      }
+      else {
+        root = nodeToDelete.right;
       }
     }
     changeHeight = true;
@@ -263,13 +280,13 @@ public class BinaryTree {
       int balance = getBalanceValue(balancePoint);
 
       // Left Left Case
-      if (balance > 1 && getBalanceValue(balancePoint.left) > 0) {
+      if (balance > 1 && getBalanceValue(balancePoint.left) >= 0) {
 //        System.out.println("LL");
         newRoot = rightRotate(balancePoint);
       }
 
       // Right Right Case
-      else if (balance < -1 && getBalanceValue(balancePoint.right) < 0) {
+      else if (balance < -1 && getBalanceValue(balancePoint.right) <= 0) {
 //        System.out.println("RR");
         newRoot = leftRotate(balancePoint);
 //        System.out.println(root.left);
@@ -367,6 +384,7 @@ public class BinaryTree {
     }
     inOrderContents(node.left, list);
     list.addAll(node.dancers);
+    System.out.println(node.dancers);
     inOrderContents(node.right, list);
     return list;
   }
@@ -673,6 +691,47 @@ public class BinaryTree {
     requests.add(new DancerImpl("M", MALE, 147));
     responds.add(140);
 
+    requests.add(new DancerImpl("M", MALE, 9999));
+    responds.add(170);
+    requests.add(new DancerImpl("M", MALE, 9999));
+    responds.add(165);
+    requests.add(new DancerImpl("M", MALE, 9999));
+    responds.add(160);
+
+    requests.add(new DancerImpl("M", MALE, 9999));
+    responds.add(155);
+
+    requests.add(new DancerImpl("M", MALE, 9999));
+    responds.add(150);
+
+    requests.add(new DancerImpl("M", MALE, 9999));
+    responds.add(130);
+
+    requests.add(new DancerImpl("M", MALE, 9999));
+    responds.add(128);
+
+    requests.add(new DancerImpl("M", MALE, 9999));
+    responds.add(120);
+
+    requests.add(new DancerImpl("M", MALE, 9999));
+    responds.add(109);
+    requests.add(new DancerImpl("M", MALE, 9999));
+    responds.add(98);
+    requests.add(new DancerImpl("M", MALE, 9999));
+    responds.add(95);
+    requests.add(new DancerImpl("M", MALE, 9999));
+    responds.add(93);
+    requests.add(new DancerImpl("M", MALE, 9999));
+    responds.add(90);
+
+
+
+
+
+
+
+
+
 
     testTreeEndToEnd(requests, responds);
   }
@@ -692,6 +751,7 @@ public class BinaryTree {
 
     }
     System.out.println(solution.returnWaitingList());
+    System.out.println("female tree root is null? " + (femaleTree.root == null));
   }
 
 
