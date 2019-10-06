@@ -2,6 +2,7 @@ package ee.ttu.algoritmid.dancers;
 import ee.ttu.algoritmid.dancers.binarytree.BinaryTree;
 import ee.ttu.algoritmid.dancers.binarytree.Node;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,8 +56,44 @@ public class HW01 implements Dancers {
 
   @Override
   public List<Dancer> returnWaitingList() {
-    List<Dancer> dancers = femaleTree.getContentsInOrder();
-    dancers.addAll(maleTree.getContentsInOrder());
-    return dancers.stream().sorted(Comparator.comparing(Dancer::getHeight).thenComparing(Comparator.comparing(Dancer::getGender).reversed())).collect(Collectors.toList());
+    List<Dancer> femaleDancers = femaleTree.getContentsInOrder();
+    List<Dancer> maleDancers = maleTree.getContentsInOrder();
+    int maleCounter = 0;
+    int femaleCounter = 0;
+    boolean femalesLeft = true;
+    boolean malesLeft = true;
+    List<Dancer> combinedList = new ArrayList<>();
+    while (malesLeft || femalesLeft) {
+      if (femalesLeft && malesLeft) {
+        if (femaleDancers.get(femaleCounter).getHeight() >= maleDancers.get(maleCounter).getHeight()) {
+          combinedList.add(femaleDancers.get(femaleCounter));
+          femaleCounter++;
+          if (femaleCounter == femaleDancers.size()) {
+            femalesLeft = false;
+          }
+        } else {
+          combinedList.add(maleDancers.get(maleCounter));
+          maleCounter++;
+          if (maleCounter == maleDancers.size()) {
+            malesLeft = false;
+          }
+        }
+      }
+      else if (femalesLeft) {
+        combinedList.add(femaleDancers.get(femaleCounter));
+        femaleCounter++;
+        if (femaleCounter == femaleDancers.size()) {
+          femalesLeft = false;
+        }
+      }
+      else {
+        combinedList.add(maleDancers.get(maleCounter));
+        maleCounter++;
+        if (maleCounter == maleDancers.size()) {
+          malesLeft = false;
+        }
+      }
+    }
+    return combinedList;
   }
 }
