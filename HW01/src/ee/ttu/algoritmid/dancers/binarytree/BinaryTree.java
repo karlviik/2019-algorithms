@@ -1,11 +1,14 @@
 package ee.ttu.algoritmid.dancers.binarytree;
 
 import ee.ttu.algoritmid.dancers.Dancer;
+import ee.ttu.algoritmid.dancers.DancerImpl;
 
 public class BinaryTree {
   private Node root;
+  private boolean changeHeight;
+  private Node balancePoint;
 
-  private BinaryTree(){
+  public BinaryTree(){
     this.root = null;
   }
 
@@ -20,32 +23,164 @@ public class BinaryTree {
     if (currentNode == null){
       Node newNode = new Node(value, parentNode);
       newNode.dancers.add(dancer);
+      changeHeight = true;
       return newNode;
     }
 
     else if (value < currentNode.value){
       currentNode.left = addDancer(currentNode.left, currentNode, value, dancer);
+      if (changeHeight) {
+        currentNode.leftHeight++;
+      }
     }
 
     else if (value > currentNode.value){
       currentNode.right = addDancer(currentNode.right, currentNode, value, dancer);
+      if (changeHeight) {
+        currentNode.rightHeight++;
+      }
     }
 
     else {
       currentNode.dancers.add(dancer);
     }
+
+    if (currentNode.rightHeight == currentNode.leftHeight) {
+      changeHeight = false;
+    }
+
+    else if (Math.abs(currentNode.rightHeight - currentNode.leftHeight) > 1 && balancePoint == null) {
+      balancePoint = currentNode;
+    }
     return currentNode;
   }
 
-  private void add(int value, Dancer dancer){
+  public void add(int value, Dancer dancer){
+    changeHeight = false;
+    balancePoint = null;
     root = addDancer(root, null, value, dancer);
+    balance();
+  }
+
+  private void childCallsForHeightDecrement(Node child) {
+    if (child.parent != null) {
+      if (child.parent.left == child) {
+        child.parent.leftHeight--;
+      } else {
+        child.parent.rightHeight--;
+      }
+      if (Math.abs(child.parent.leftHeight - child.parent.rightHeight) > 1 && balancePoint == null) {
+        balancePoint = child.parent;
+      }
+      if (child.parent.leftHeight == child.parent.rightHeight) {
+        childCallsForHeightDecrement(child.parent);
+      }
+    }
+  }
+
+  public void deleteNode(Node nodeToDelete) {
+    if (nodeToDelete.left == null || nodeToDelete.right == null) {
+      childCallsForHeightDecrement(nodeToDelete);
+      deleteOneChildOrChildlessNode(nodeToDelete);
+      if (nodeToDelete.parent == null) {
+        root = null;
+      }
+    } else {
+      Node replacementNode = findAndDeleteSmallest(nodeToDelete.right);
+      if (changeHeight) {
+        nodeToDelete.rightHeight--;
+        if (Math.abs(nodeToDelete.leftHeight - nodeToDelete.rightHeight) > 1 && balancePoint == null) {
+          balancePoint = replacementNode;
+        }
+        if (nodeToDelete.rightHeight == nodeToDelete.leftHeight) {
+          childCallsForHeightDecrement(nodeToDelete);
+        } else {
+          changeHeight = false;
+        }
+      }
+      replacementNode.parent = nodeToDelete.parent;
+      replacementNode.left = nodeToDelete.left;
+      replacementNode.right = nodeToDelete.right;
+      replacementNode.leftHeight = nodeToDelete.leftHeight;
+      replacementNode.rightHeight = nodeToDelete.rightHeight;
+      if (nodeToDelete.right != null) {
+        nodeToDelete.right.parent = replacementNode;
+      }
+      if (nodeToDelete.left != null) {
+        nodeToDelete.left.parent = replacementNode;
+      }
+      if (nodeToDelete.parent != null) {
+        if (nodeToDelete.parent.left == nodeToDelete) {
+          nodeToDelete.parent.left = replacementNode;
+        }
+        else {
+          nodeToDelete.parent.right = replacementNode;
+        }
+      }
+      else {
+        root = replacementNode;
+      }
+    }
+    balance();
+  }
+
+  private void deleteOneChildOrChildlessNode(Node nodeToDelete) {
+    if (nodeToDelete.parent != null) {
+      if (nodeToDelete.parent.left == nodeToDelete) {
+        if (nodeToDelete.left != null) {
+          nodeToDelete.parent.left = nodeToDelete.left;
+          nodeToDelete.left.parent = nodeToDelete.parent;
+        } else if (nodeToDelete.right != null) {
+          nodeToDelete.parent.left = nodeToDelete.right;
+          nodeToDelete.right.parent = nodeToDelete.parent;
+        } else {
+          nodeToDelete.parent.left = null;
+        }
+//        nodeToDelete.parent.leftHeight--;
+      } else {
+        if (nodeToDelete.left != null) {
+          nodeToDelete.parent.right = nodeToDelete.left;
+          nodeToDelete.left.parent = nodeToDelete.parent;
+        } else if (nodeToDelete.right != null) {
+          nodeToDelete.parent.right = nodeToDelete.right;
+          nodeToDelete.right.parent = nodeToDelete.parent;
+        } else {
+          nodeToDelete.parent.right = null;
+        }
+//        nodeToDelete.parent.rightHeight--;
+      }
+    }
+    changeHeight = true;
+  }
+
+  private Node findAndDeleteSmallest(Node currentNode) {
+    if (currentNode.left == null) {
+      deleteOneChildOrChildlessNode(currentNode);
+      return currentNode;
+    } else {
+      Node smallest = findAndDeleteSmallest(currentNode.left);
+      if (changeHeight) {
+        currentNode.leftHeight--;
+      }
+      if (currentNode.rightHeight > currentNode.leftHeight) {
+        changeHeight = false;
+        if (currentNode.rightHeight - currentNode.leftHeight == 2 && balancePoint == null) {
+          balancePoint = currentNode;
+        }
+      }
+      return smallest;
+    }
   }
 
   public String toString(){
     return root.printTree(new StringBuilder(), true, new StringBuilder()).toString();
   }
 
-  public Node findLessOrEqual(Node node, int value) {
+  public Node findLessOrEqual(int value) {
+    return findLessOrEqualRecursive(root, value);
+  }
+
+  private Node findLessOrEqualRecursive(Node node, int value) {
     if (node == null) {
       return null;
     }
@@ -53,16 +188,23 @@ public class BinaryTree {
       return node;
     }
     if (node.value > value) {
-      return findLessOrEqual(node.left, value);
+      if (node.left != null) {
+        return findLessOrEqualRecursive(node.left, value);
+      }
+      return node;
     }
-    Node rightNode = findLessOrEqual(node.right, value);
+    Node rightNode = findLessOrEqualRecursive(node.right, value);
     if (rightNode == null) {
       return node;
     }
     return rightNode;
   }
 
-  public Node findMoreOrEqual(Node node, int value) {
+  public Node findMoreOrEqual(int value) {
+    return findMoreOrEqualRecursive(root, value);
+  }
+
+  private Node findMoreOrEqualRecursive(Node node, int value) {
     if (node == null) {
       return null;
     }
@@ -70,32 +212,114 @@ public class BinaryTree {
       return node;
     }
     if (node.value < value) {
-      return findMoreOrEqual(node.right, value);
+      if (node.right != null) {
+        return findMoreOrEqualRecursive(node.right, value);
+      }
+      return node;
     }
-    Node leftNode = findMoreOrEqual(node.left, value);
+    Node leftNode = findMoreOrEqualRecursive(node.left, value);
     if (leftNode == null) {
       return node;
     }
     return leftNode;
   }
 
-//  /**
-//   * Check if value exsists in given node
-//   * @param root node where search is being made
-//   * @param value to be searched
-//   */
-//  private boolean containsNode(Node root, int value){
-//    if (root == null){
-//      return false;
-//    }
-//
-//    if (root.value == value){
-//      return true;
-//    }
-//
-//    return root.value < value ? containsNode(root.right, value) : containsNode(root.left, value);
+  private int getBalanceValue(Node node) {
+    return node.leftHeight - node.rightHeight;
+  }
 
-//  }
+  // balance, rightRotate and leftRotate heavily inspired from https://www.geeksforgeeks.org/avl-tree-set-1-insertion/
+  private void balance() {
+    System.out.println("I did balance");
+    if (balancePoint != null) {
+      System.out.println("I ACTUALLY did balance with node value " + balancePoint.value);
+      Node newRoot;
+      Node parent = balancePoint.parent;
+
+      int balance = getBalanceValue(balancePoint);
+
+      // Left Left Case
+      if (balance > 1 && getBalanceValue(balancePoint.left) > 0) {
+//        System.out.println("LL");
+        newRoot = rightRotate(balancePoint);
+      }
+
+      // Right Right Case
+      else if (balance < -1 && getBalanceValue(balancePoint.right) < 0) {
+//        System.out.println("RR");
+        newRoot = leftRotate(balancePoint);
+//        System.out.println(root.left);
+
+      }
+
+      // Left Right Case
+      else if (balance > 1 && getBalanceValue(balancePoint.left) < 0) {
+        balancePoint.left = leftRotate(balancePoint.left);
+        newRoot = rightRotate(balancePoint);
+      }
+
+      // Right Left Case
+//      else {
+      else if (balance < -1 && getBalanceValue(balancePoint.right) > 0) {
+        balancePoint.right = rightRotate(balancePoint.right);
+        newRoot = leftRotate(balancePoint);
+      }
+      else {
+        System.out.println("I reached something I shouldn't have reached");
+        return;
+      }
+
+      if (parent == null) {
+        root = newRoot;
+      }
+      else {
+        if (parent.left == balancePoint) {
+          parent.left = newRoot;
+        } else {
+          parent.right = newRoot;
+        }
+      }
+      balancePoint = null;
+    }
+  }
+
+  private Node rightRotate(Node rotationRoot) {
+    Node rotationLeft = rotationRoot.left;
+    Node rotationLeftRight = rotationLeft.right;
+    rotationRoot.left = rotationLeftRight;
+    rotationLeft.right = rotationRoot;
+    rotationRoot.leftHeight = (rotationLeftRight == null ? 0 : 1 + Math.max(rotationLeftRight.rightHeight, rotationLeftRight.leftHeight));
+    rotationLeft.rightHeight = 1 + Math.max(rotationRoot.rightHeight, rotationRoot.leftHeight);
+
+    Node rotationRootParent = rotationRoot.parent;
+    rotationRoot.parent = rotationLeft;
+    rotationLeft.parent = rotationRootParent;
+    if (rotationLeftRight != null) {
+      rotationLeftRight.parent = rotationRoot;
+    }
+
+    return rotationLeft;
+  }
+
+  private Node leftRotate(Node rotationRoot) {
+    Node rotationRight = rotationRoot.right;
+    Node rotationRightLeft = rotationRight.left;
+    rotationRoot.right = rotationRightLeft;
+    rotationRight.left = rotationRoot;
+    rotationRoot.rightHeight = (rotationRightLeft == null ? 0 : 1 + Math.max(rotationRightLeft.rightHeight, rotationRightLeft.leftHeight));
+    rotationRight.leftHeight = 1 + Math.max(rotationRoot.rightHeight, rotationRoot.leftHeight);
+
+
+    Node rotationRootParent = rotationRoot.parent;
+    rotationRoot.parent = rotationRight;
+    rotationRight.parent = rotationRootParent;
+    if (rotationRightLeft != null) {
+      rotationRightLeft.parent = rotationRoot;
+    }
+    return rotationRight;
+  }
+
+
 //  /**
 //   * Traverses tree in pre-order using recursion
 //   * Prints out visited node
@@ -192,15 +416,34 @@ public class BinaryTree {
 
   public static void main(String[] args) {
     BinaryTree tree = new BinaryTree();
-
+    tree.add(1, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
+    System.out.println(tree.toString());
+    tree.add(2, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
+    System.out.println(tree.toString());
+    tree.add(3, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
+    System.out.println(tree.toString());
+    tree.add(4, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
+    System.out.println(tree.toString());
+    tree.add(5, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
+    System.out.println(tree.toString());
+    tree.add(6, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
+    System.out.println(tree.toString());
+    tree.add(7, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
+    System.out.println(tree.toString());
+    tree.add(8, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
+    System.out.println(tree.toString());
+    tree.add(9, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
+    System.out.println(tree.toString());
+    tree.deleteNode(tree.root);
     System.out.println(tree.toString());
 
-    System.out.println(tree.contains(7));
-    System.out.println(tree.contains(11));
 
-    tree.preOrderRecursion(tree.root);
-    System.out.println();
-    tree.preOrderLoop(tree.root);
+//    System.out.println(tree.contains(7));
+//    System.out.println(tree.contains(11));
+//
+//    tree.preOrderRecursion(tree.root);
+//    System.out.println();
+//    tree.preOrderLoop(tree.root);
 
   }
 }

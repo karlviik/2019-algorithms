@@ -9,6 +9,8 @@ public class Node {
 
   int value;
   List<Dancer> dancers;
+  int leftHeight;
+  int rightHeight;
   Node left;
   Node right;
   Node parent;
@@ -19,6 +21,8 @@ public class Node {
     this.parent = parent;
     this.left = null;
     this.right = null;
+    this.leftHeight = 0;
+    this.rightHeight = 0;
   }
 
   /**
