@@ -39,6 +39,7 @@ public class HW01 implements Dancers {
       }
       couple = new DancingCoupleImpl(potentialNode.getDancers().get(0), dancer);
     }
+    System.out.println("LENGTH BEFORE REMOVAL " + potentialNode.getDancers().size());
     potentialNode.getDancers().remove(0);
     if (potentialNode.getDancers().size() == 0) {
       if (fromFemale) {
@@ -47,6 +48,7 @@ public class HW01 implements Dancers {
         maleTree.deleteNode(potentialNode);
       }
     }
+    System.out.println("LENGTH AFTER REMOVAL " + potentialNode.getDancers().size());
     return couple;
   }
 
@@ -54,6 +56,6 @@ public class HW01 implements Dancers {
   public List<Dancer> returnWaitingList() {
     List<Dancer> dancers = femaleTree.getContentsInOrder();
     dancers.addAll(maleTree.getContentsInOrder());
-    return dancers.stream().sorted(Comparator.comparing(Dancer::getHeight).thenComparing(Dancer::getGender)).collect(Collectors.toList());
+    return dancers.stream().sorted(Comparator.comparing(Dancer::getHeight).thenComparing(Comparator.comparing(Dancer::getGender).reversed())).collect(Collectors.toList());
   }
 }

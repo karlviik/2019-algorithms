@@ -87,14 +87,17 @@ public class BinaryTree {
     if (child.parent != null) {
       if (child.parent.left == child) {
         child.parent.leftHeight--;
+        if (child.parent.leftHeight >= child.parent.rightHeight) {
+          childCallsForHeightDecrement(child.parent);
+        }
       } else {
         child.parent.rightHeight--;
+        if (child.parent.rightHeight >= child.parent.leftHeight) {
+          childCallsForHeightDecrement(child.parent);
+        }
       }
       if (Math.abs(child.parent.leftHeight - child.parent.rightHeight) > 1 && balancePoint == null) {
         balancePoint = child.parent;
-      }
-      if (child.parent.leftHeight == child.parent.rightHeight) {
-        childCallsForHeightDecrement(child.parent);
       }
     }
   }
@@ -688,6 +691,7 @@ public class BinaryTree {
       System.out.println(solution.femaleTree.root.leftHeight);
 
     }
+    System.out.println(solution.returnWaitingList());
   }
 
 

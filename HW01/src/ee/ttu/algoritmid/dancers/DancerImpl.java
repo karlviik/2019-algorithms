@@ -1,5 +1,7 @@
 package ee.ttu.algoritmid.dancers;
 
+import javax.print.DocFlavor;
+
 public class DancerImpl implements Dancer {
 
   private String name;
@@ -28,5 +30,10 @@ public class DancerImpl implements Dancer {
   @Override
   public int getHeight() {
     return height;
+  }
+
+  @Override
+  public String toString() {
+    return height + " " + gender;
   }
 }
