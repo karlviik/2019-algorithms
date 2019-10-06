@@ -2,6 +2,14 @@ package ee.ttu.algoritmid.dancers.binarytree;
 
 import ee.ttu.algoritmid.dancers.Dancer;
 import ee.ttu.algoritmid.dancers.DancerImpl;
+import ee.ttu.algoritmid.dancers.DancingCouple;
+import ee.ttu.algoritmid.dancers.HW01;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static ee.ttu.algoritmid.dancers.Dancer.Gender.FEMALE;
+import static ee.ttu.algoritmid.dancers.Dancer.Gender.MALE;
 
 public class BinaryTree {
   private Node root;
@@ -191,7 +199,7 @@ public class BinaryTree {
       if (node.left != null) {
         return findLessOrEqualRecursive(node.left, value);
       }
-      return node;
+      return null;
     }
     Node rightNode = findLessOrEqualRecursive(node.right, value);
     if (rightNode == null) {
@@ -215,7 +223,7 @@ public class BinaryTree {
       if (node.right != null) {
         return findMoreOrEqualRecursive(node.right, value);
       }
-      return node;
+      return null;
     }
     Node leftNode = findMoreOrEqualRecursive(node.left, value);
     if (leftNode == null) {
@@ -230,9 +238,9 @@ public class BinaryTree {
 
   // balance, rightRotate and leftRotate heavily inspired from https://www.geeksforgeeks.org/avl-tree-set-1-insertion/
   private void balance() {
-    System.out.println("I did balance");
+//    System.out.println("I did balance");
     if (balancePoint != null) {
-      System.out.println("I ACTUALLY did balance with node value " + balancePoint.value);
+//      System.out.println("I ACTUALLY did balance with node value " + balancePoint.value);
       Node newRoot;
       Node parent = balancePoint.parent;
 
@@ -413,29 +421,252 @@ public class BinaryTree {
 //  }
 
 
+  public static void testMaleTreeEndToEndPublic() {
+    List<Dancer> requests = new ArrayList<>();
+    List<Integer> responds = new ArrayList<>();
 
+    requests.add(new DancerImpl("M", MALE, 150));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 130));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 135));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 149));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 200));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 170));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 160));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 133));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 125));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 190));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 140));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 195));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 148));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 210));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 138));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 205));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 165));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 163));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 168));
+    responds.add(null);
+
+
+    requests.add(new DancerImpl("F", FEMALE, 145));
+    responds.add(150);
+
+    requests.add(new DancerImpl("F", FEMALE, 134));
+    responds.add(140);
+
+    requests.add(new DancerImpl("F", FEMALE, 159));
+    responds.add(165);
+
+    requests.add(new DancerImpl("F", FEMALE, 140));
+    responds.add(148);
+
+    requests.add(new DancerImpl("F", FEMALE, 156));
+    responds.add(163);
+
+
+    requests.add(new DancerImpl("M", MALE, 169));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 139));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 180));
+    responds.add(null);
+
+    requests.add(new DancerImpl("M", MALE, 134));
+    responds.add(null);
+
+
+    requests.add(new DancerImpl("F", FEMALE, 164));
+    responds.add(169);
+
+    requests.add(new DancerImpl("F", FEMALE, 134));
+    responds.add(139);
+
+    requests.add(new DancerImpl("F", FEMALE, 129));
+    responds.add(134);
+
+    requests.add(new DancerImpl("F", FEMALE, 175));
+    responds.add(180);
+
+
+    testTreeEndToEnd(requests, responds);
+  }
+
+  public static void testFemaleTreeEndToEndPublic() {
+    List<Dancer> requests = new ArrayList<>();
+    List<Integer> responds = new ArrayList<>();
+
+    requests.add(new DancerImpl("F", FEMALE, 110));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 90));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 95));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 109));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 160));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 130));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 120));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 93));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 85));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 150));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 100));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 155));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 108));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 170));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 98));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 165));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 125));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 123));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 128));
+    responds.add(null);
+
+
+    requests.add(new DancerImpl("M", MALE, 115));
+    responds.add(110);
+
+    requests.add(new DancerImpl("M", MALE, 107));
+    responds.add(100);
+
+    requests.add(new DancerImpl("M", MALE, 132));
+    responds.add(125);
+
+    requests.add(new DancerImpl("M", MALE, 113));
+    responds.add(108);
+
+    requests.add(new DancerImpl("M", MALE, 130));
+    responds.add(123);
+
+
+    requests.add(new DancerImpl("F", FEMALE, 129));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 99));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 140));
+    responds.add(null);
+
+    requests.add(new DancerImpl("F", FEMALE, 94));
+    responds.add(null);
+
+
+    requests.add(new DancerImpl("M", MALE, 134));
+    responds.add(129);
+
+    requests.add(new DancerImpl("M", MALE, 106));
+    responds.add(99);
+
+    requests.add(new DancerImpl("M", MALE, 99));
+    responds.add(94);
+
+    requests.add(new DancerImpl("M", MALE, 147));
+    responds.add(140);
+
+
+    testTreeEndToEnd(requests, responds);
+  }
+
+  private static void testTreeEndToEnd(List<Dancer> requests, List<Integer> responds) {
+    HW01 solution = new HW01();
+
+    for (int i = 0; i < requests.size(); i++) {
+      testRequestResponse(solution, requests.get(i), responds.get(i));
+    }
+  }
+
+
+  private static void testRequestResponse(HW01 solution, Dancer dancer, Integer expectedPartnerHeight) {
+
+    DancingCouple couple = solution.findPartnerFor(dancer);
+
+    if (couple == null) {
+      if (expectedPartnerHeight != null) {
+        System.out.println("Partner wasn't found, but should have");
+      }
+    } else {
+      if (expectedPartnerHeight == null) {
+        System.out.println("Partner was found, but shouldn't have");
+      } else {
+        Dancer partner = dancer.getGender() == MALE ? couple.getFemaleDancer() : couple.getMaleDancer();
+
+        if (partner.getHeight() != expectedPartnerHeight) {
+          System.out.println("Partner of wrong height found");
+        }
+      }
+    }
+  }
   public static void main(String[] args) {
-    BinaryTree tree = new BinaryTree();
-    tree.add(1, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
-    System.out.println(tree.toString());
-    tree.add(2, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
-    System.out.println(tree.toString());
-    tree.add(3, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
-    System.out.println(tree.toString());
-    tree.add(4, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
-    System.out.println(tree.toString());
-    tree.add(5, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
-    System.out.println(tree.toString());
-    tree.add(6, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
-    System.out.println(tree.toString());
-    tree.add(7, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
-    System.out.println(tree.toString());
-    tree.add(8, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
-    System.out.println(tree.toString());
-    tree.add(9, new DancerImpl("a", Dancer.Gender.FEMALE, 111));
-    System.out.println(tree.toString());
-    tree.deleteNode(tree.root);
-    System.out.println(tree.toString());
+//    testMaleTreeEndToEndPublic();
+//    testFemaleTreeEndToEndPublic();
 
 
 //    System.out.println(tree.contains(7));
