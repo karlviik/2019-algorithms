@@ -5,6 +5,7 @@ import ee.ttu.algoritmid.dancers.DancerImpl;
 import ee.ttu.algoritmid.dancers.DancingCouple;
 import ee.ttu.algoritmid.dancers.HW01;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,14 +61,26 @@ public class BinaryTree {
     else if (Math.abs(currentNode.rightHeight - currentNode.leftHeight) > 1 && balancePoint == null) {
       balancePoint = currentNode;
     }
+    if (balancePoint != null && balancePoint.value == 155) {
+      System.out.println(balancePoint.leftHeight);
+      System.out.println(balancePoint.rightHeight);
+    }
     return currentNode;
   }
 
   public void add(int value, Dancer dancer){
     changeHeight = false;
     balancePoint = null;
+    System.out.println(root == null ? 0 : "root rightheight " + root.rightHeight);
     root = addDancer(root, null, value, dancer);
+    if (root != null) {
+      if (root.right != null) {
+        System.out.println("root right height after insertion " + root.right.rightHeight);
+      }
+    }
+    System.out.println("root rightheight " + root.rightHeight);
     balance();
+    System.out.println("root rightheight after balance " + root.rightHeight);
   }
 
   private void childCallsForHeightDecrement(Node child) {
@@ -181,7 +194,7 @@ public class BinaryTree {
   }
 
   public String toString(){
-    return root.printTree(new StringBuilder(), true, new StringBuilder()).toString();
+    return root == null ? "" : root.printTree(new StringBuilder(), true, new StringBuilder()).toString();
   }
 
   public Node findLessOrEqual(int value) {
@@ -281,11 +294,26 @@ public class BinaryTree {
         root = newRoot;
       }
       else {
+        int prevheight;
+        int newheight;
         if (parent.left == balancePoint) {
           parent.left = newRoot;
+          prevheight = parent.leftHeight;
+          parent.leftHeight = 1 + Math.max(newRoot.rightHeight, newRoot.leftHeight);
+          newheight = parent.leftHeight;
         } else {
           parent.right = newRoot;
+          prevheight = parent.rightHeight;
+          parent.rightHeight = 1 + Math.max(newRoot.rightHeight, newRoot.leftHeight);
+          newheight = parent.rightHeight;
         }
+        if (prevheight - newheight == 1) {
+          childCallsForHeightDecrement(parent);
+        }
+      }
+      if (balancePoint.value == 160) {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        System.out.println("root right rightheight after balance " + root.right.rightHeight);
       }
       balancePoint = null;
     }
@@ -305,7 +333,6 @@ public class BinaryTree {
     if (rotationLeftRight != null) {
       rotationLeftRight.parent = rotationRoot;
     }
-
     return rotationLeft;
   }
 
@@ -640,6 +667,14 @@ public class BinaryTree {
 
     for (int i = 0; i < requests.size(); i++) {
       testRequestResponse(solution, requests.get(i), responds.get(i));
+      System.out.println(solution.femaleTree.toString());
+    }
+    System.out.println(solution.femaleTree.toString());
+    BinaryTree femaleTree = solution.femaleTree;
+    if (femaleTree.root != null) {
+      System.out.println(solution.femaleTree.root.rightHeight);
+      System.out.println(solution.femaleTree.root.leftHeight);
+
     }
   }
 
@@ -666,7 +701,7 @@ public class BinaryTree {
   }
   public static void main(String[] args) {
 //    testMaleTreeEndToEndPublic();
-//    testFemaleTreeEndToEndPublic();
+    testFemaleTreeEndToEndPublic();
 
 
 //    System.out.println(tree.contains(7));

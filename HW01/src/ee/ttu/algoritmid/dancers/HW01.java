@@ -5,8 +5,8 @@ import ee.ttu.algoritmid.dancers.binarytree.Node;
 import java.util.List;
 public class HW01 implements Dancers {
 
-  BinaryTree femaleTree = new BinaryTree();
-  BinaryTree maleTree = new BinaryTree();
+  public BinaryTree femaleTree = new BinaryTree();
+  public BinaryTree maleTree = new BinaryTree();
 
   public HW01() {
   }

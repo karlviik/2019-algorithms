@@ -34,7 +34,7 @@ public class Node {
       right.printTree(new StringBuilder().append(prefix).append(isTail ? "│   " : "    "), false, sb);
     }
 
-    sb.append(prefix).append(isTail ? "└── " : "┌── ").append(value).append("\n");
+    sb.append(prefix).append(isTail ? "└── " : "┌── ").append(value + " " + leftHeight + " " + rightHeight).append("\n");
 
     if(left != null) {
       left.printTree(new StringBuilder().append(prefix).append(isTail ? "    " : "│   "), true, sb);
