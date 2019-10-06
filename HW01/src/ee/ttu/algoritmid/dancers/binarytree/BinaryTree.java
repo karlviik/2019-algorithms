@@ -354,7 +354,19 @@ public class BinaryTree {
     return rotationRight;
   }
 
+  public List<Dancer> getContentsInOrder() {
+    return inOrderContents(root, new ArrayList<>());
+  }
 
+  public List<Dancer> inOrderContents(Node node, List<Dancer> list) {
+    if (node == null) {
+      return list;
+    }
+    inOrderContents(node.left, list);
+    list.addAll(node.dancers);
+    inOrderContents(node.right, list);
+    return list;
+  }
 //  /**
 //   * Traverses tree in pre-order using recursion
 //   * Prints out visited node

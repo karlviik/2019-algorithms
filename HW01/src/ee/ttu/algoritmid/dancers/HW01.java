@@ -2,7 +2,10 @@ package ee.ttu.algoritmid.dancers;
 import ee.ttu.algoritmid.dancers.binarytree.BinaryTree;
 import ee.ttu.algoritmid.dancers.binarytree.Node;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
 public class HW01 implements Dancers {
 
   public BinaryTree femaleTree = new BinaryTree();
@@ -49,6 +52,8 @@ public class HW01 implements Dancers {
 
   @Override
   public List<Dancer> returnWaitingList() {
-    return null;
+    List<Dancer> dancers = femaleTree.getContentsInOrder();
+    dancers.addAll(maleTree.getContentsInOrder());
+    return dancers.stream().sorted(Comparator.comparing(Dancer::getHeight).thenComparing(Dancer::getGender)).collect(Collectors.toList());
   }
 }
