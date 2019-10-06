@@ -3,9 +3,7 @@ import ee.ttu.algoritmid.dancers.binarytree.BinaryTree;
 import ee.ttu.algoritmid.dancers.binarytree.Node;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class HW01 implements Dancers {
 
@@ -32,7 +30,6 @@ public class HW01 implements Dancers {
         return null;
       }
       couple = new DancingCoupleImpl(dancer, potentialNode.getDancers().remove(0));
-      System.out.println("I instead gave " + couple.getFemaleDancer().getHeight());
     } else {
       potentialNode = maleTree.findMoreOrEqual(dancer.getHeight() + 5);
       if (potentialNode == null) {
@@ -40,11 +37,9 @@ public class HW01 implements Dancers {
         return null;
       }
       couple = new DancingCoupleImpl(potentialNode.getDancers().remove(0), dancer);
-      System.out.println("I instead gave " + couple.getMaleDancer().getHeight());
 
     }
     if (potentialNode.getDancers().isEmpty()) {
-      System.out.println("I SHOULD HAVE REMOOOVED AN ELEMENTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
       if (fromFemale) {
         femaleTree.deleteNode(potentialNode);
       } else {
@@ -60,8 +55,8 @@ public class HW01 implements Dancers {
     List<Dancer> maleDancers = maleTree.getContentsInOrder();
     int maleCounter = 0;
     int femaleCounter = 0;
-    boolean femalesLeft = true;
-    boolean malesLeft = true;
+    boolean femalesLeft = femaleDancers.size() != 0;
+    boolean malesLeft = maleDancers.size() != 0;
     List<Dancer> combinedList = new ArrayList<>();
     while (malesLeft || femalesLeft) {
       if (femalesLeft && malesLeft) {
