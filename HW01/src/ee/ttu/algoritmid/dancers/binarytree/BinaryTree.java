@@ -5,18 +5,17 @@ import ee.ttu.algoritmid.dancers.DancerImpl;
 import ee.ttu.algoritmid.dancers.DancingCouple;
 import ee.ttu.algoritmid.dancers.HW01;
 
-import javax.swing.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static ee.ttu.algoritmid.dancers.Dancer.Gender.FEMALE;
 import static ee.ttu.algoritmid.dancers.Dancer.Gender.MALE;
 
 public class BinaryTree {
   private Node root;
-  private boolean changeHeight;
   private Node balancePoint;
+  private Node newNode;
 
   public BinaryTree(){
     this.root = null;
@@ -31,111 +30,57 @@ public class BinaryTree {
    */
   private Node addDancer(Node currentNode, Node parentNode, int value, Dancer dancer){
     if (currentNode == null){
-      Node newNode = new Node(value, parentNode);
+      newNode = new Node(value, parentNode);
       newNode.dancers.add(dancer);
-      changeHeight = true;
       return newNode;
     }
 
     else if (value < currentNode.value){
       currentNode.left = addDancer(currentNode.left, currentNode, value, dancer);
-      if (changeHeight) {
-        currentNode.leftHeight++;
-      }
     }
-
     else if (value > currentNode.value){
       currentNode.right = addDancer(currentNode.right, currentNode, value, dancer);
-      if (changeHeight) {
-        currentNode.rightHeight++;
-      }
     }
-
     else {
       currentNode.dancers.add(dancer);
-    }
-
-    if (currentNode.rightHeight == currentNode.leftHeight) {
-      changeHeight = false;
-    }
-
-    else if (Math.abs(currentNode.rightHeight - currentNode.leftHeight) > 1 && balancePoint == null) {
-      balancePoint = currentNode;
-    }
-    if (balancePoint != null && balancePoint.value == 155) {
-      System.out.println(balancePoint.leftHeight);
-      System.out.println(balancePoint.rightHeight);
     }
     return currentNode;
   }
 
   public void add(int value, Dancer dancer){
-    changeHeight = false;
     balancePoint = null;
-    System.out.println(root == null ? 0 : "root rightheight " + root.rightHeight);
+    newNode = null;
     root = addDancer(root, null, value, dancer);
-    if (root != null) {
-      if (root.right != null) {
-        System.out.println("root right height after insertion " + root.right.rightHeight);
-      }
-    }
-    System.out.println("root rightheight " + root.rightHeight);
+    updateHeights(newNode);
+    newNode = null;
     balance();
-    System.out.println("root rightheight after balance " + root.rightHeight);
   }
 
-  private void childCallsForHeightDecrement(Node child) {
-    if (child != null && child.parent != null && child.parent.value == 155) {
-      System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-      System.out.println(balancePoint);
+  private void updateHeights(Node node) {
+    if (node == null) {
+      return;
     }
-    if (child.parent != null) {
-      if (child.parent.left == child) {
-        child.parent.leftHeight--;
-        if (child.parent.leftHeight >= child.parent.rightHeight) {
-          childCallsForHeightDecrement(child.parent);
-        }
-      } else {
-        child.parent.rightHeight--;
-        if (child.parent.rightHeight >= child.parent.leftHeight) {
-          childCallsForHeightDecrement(child.parent);
-        }
-      }
-      if (Math.abs(child.parent.leftHeight - child.parent.rightHeight) > 1 && balancePoint == null) {
-        balancePoint = child.parent;
-      }
-      if (child != null && child.parent != null && child.parent.value == 155 && balancePoint != null) {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        System.out.println(balancePoint.value);
-      }
+    node.leftHeight = node.left == null ? 0 : 1 + Math.max(node.left.leftHeight, node.left.rightHeight);
+    node.rightHeight = node.right == null ? 0 : 1 + Math.max(node.right.leftHeight, node.right.rightHeight);
+    if (Math.abs(node.leftHeight - node.rightHeight) > 1 && balancePoint == null) {
+      balancePoint = node;
     }
+    updateHeights(node.parent);
   }
 
   public void deleteNode(Node nodeToDelete) {
     if (nodeToDelete.left == null || nodeToDelete.right == null) {
-      childCallsForHeightDecrement(nodeToDelete);
       deleteOneChildOrChildlessNode(nodeToDelete);
-      if (root == nodeToDelete) {
-        root = null;
-      }
+      updateHeights(nodeToDelete.parent);
     } else {
       Node replacementNode = findAndDeleteSmallest(nodeToDelete.right);
-      if (changeHeight) {
-        nodeToDelete.rightHeight--;
-        if (Math.abs(nodeToDelete.leftHeight - nodeToDelete.rightHeight) > 1 && balancePoint == null) {
-          balancePoint = replacementNode;
-        }
-        if (nodeToDelete.rightHeight == nodeToDelete.leftHeight) {
-          childCallsForHeightDecrement(nodeToDelete);
-        } else {
-          changeHeight = false;
-        }
+      if (balancePoint == nodeToDelete) {
+        balancePoint = replacementNode;
       }
+
       replacementNode.parent = nodeToDelete.parent;
       replacementNode.left = nodeToDelete.left;
       replacementNode.right = nodeToDelete.right;
-      replacementNode.leftHeight = nodeToDelete.leftHeight;
-      replacementNode.rightHeight = nodeToDelete.rightHeight;
       if (nodeToDelete.right != null) {
         nodeToDelete.right.parent = replacementNode;
       }
@@ -153,6 +98,7 @@ public class BinaryTree {
       else {
         root = replacementNode;
       }
+      updateHeights(replacementNode);
     }
     balance();
   }
@@ -169,7 +115,6 @@ public class BinaryTree {
         } else {
           nodeToDelete.parent.left = null;
         }
-//        nodeToDelete.parent.leftHeight--;
       } else {
         if (nodeToDelete.left != null) {
           nodeToDelete.parent.right = nodeToDelete.left;
@@ -180,36 +125,29 @@ public class BinaryTree {
         } else {
           nodeToDelete.parent.right = null;
         }
-//        nodeToDelete.parent.rightHeight--;
       }
     }
     else {
       if (nodeToDelete.left != null) {
         root = nodeToDelete.left;
+        nodeToDelete.left.parent = null;
       }
-      else {
+      else if (nodeToDelete.right != null) {
         root = nodeToDelete.right;
+        nodeToDelete.right.parent = null;
+      } else {
+        root = null;
       }
     }
-    changeHeight = true;
   }
 
   private Node findAndDeleteSmallest(Node currentNode) {
     if (currentNode.left == null) {
       deleteOneChildOrChildlessNode(currentNode);
+      updateHeights(currentNode.parent);
       return currentNode;
     } else {
-      Node smallest = findAndDeleteSmallest(currentNode.left);
-      if (changeHeight) {
-        currentNode.leftHeight--;
-      }
-      if (currentNode.rightHeight > currentNode.leftHeight) {
-        changeHeight = false;
-        if (currentNode.rightHeight - currentNode.leftHeight == 2 && balancePoint == null) {
-          balancePoint = currentNode;
-        }
-      }
-      return smallest;
+      return findAndDeleteSmallest(currentNode.left);
     }
   }
 
@@ -281,26 +219,18 @@ public class BinaryTree {
 
       // Left Left Case
       if (balance > 1 && getBalanceValue(balancePoint.left) >= 0) {
-//        System.out.println("LL");
         newRoot = rightRotate(balancePoint);
       }
-
       // Right Right Case
       else if (balance < -1 && getBalanceValue(balancePoint.right) <= 0) {
-//        System.out.println("RR");
         newRoot = leftRotate(balancePoint);
-//        System.out.println(root.left);
-
       }
-
       // Left Right Case
       else if (balance > 1 && getBalanceValue(balancePoint.left) < 0) {
         balancePoint.left = leftRotate(balancePoint.left);
         newRoot = rightRotate(balancePoint);
       }
-
       // Right Left Case
-//      else {
       else if (balance < -1 && getBalanceValue(balancePoint.right) > 0) {
         balancePoint.right = rightRotate(balancePoint.right);
         newRoot = leftRotate(balancePoint);
@@ -313,28 +243,7 @@ public class BinaryTree {
       if (parent == null) {
         root = newRoot;
       }
-      else {
-        int prevheight;
-        int newheight;
-        if (parent.left == balancePoint) {
-          parent.left = newRoot;
-          prevheight = parent.leftHeight;
-          parent.leftHeight = 1 + Math.max(newRoot.rightHeight, newRoot.leftHeight);
-          newheight = parent.leftHeight;
-        } else {
-          parent.right = newRoot;
-          prevheight = parent.rightHeight;
-          parent.rightHeight = 1 + Math.max(newRoot.rightHeight, newRoot.leftHeight);
-          newheight = parent.rightHeight;
-        }
-        if (prevheight - newheight == 1) {
-          childCallsForHeightDecrement(parent);
-        }
-      }
-      if (balancePoint.value == 160) {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        System.out.println("root right rightheight after balance " + root.right.rightHeight);
-      }
+      updateHeights(parent);
       balancePoint = null;
     }
   }
@@ -350,6 +259,14 @@ public class BinaryTree {
     Node rotationRootParent = rotationRoot.parent;
     rotationRoot.parent = rotationLeft;
     rotationLeft.parent = rotationRootParent;
+    if (rotationRootParent != null) {
+      if (rotationRootParent.left == rotationRoot) {
+        rotationRootParent.left = rotationLeft;
+      }
+      else {
+        rotationRootParent.right = rotationLeft;
+      }
+    }
     if (rotationLeftRight != null) {
       rotationLeftRight.parent = rotationRoot;
     }
@@ -368,6 +285,14 @@ public class BinaryTree {
     Node rotationRootParent = rotationRoot.parent;
     rotationRoot.parent = rotationRight;
     rotationRight.parent = rotationRootParent;
+    if (rotationRootParent != null) {
+      if (rotationRootParent.left == rotationRoot) {
+        rotationRootParent.left = rotationRight;
+      }
+      else {
+        rotationRootParent.right = rotationRight;
+      }
+    }
     if (rotationRightLeft != null) {
       rotationRightLeft.parent = rotationRoot;
     }
@@ -378,7 +303,7 @@ public class BinaryTree {
     return inOrderContents(root, new ArrayList<>());
   }
 
-  public List<Dancer> inOrderContents(Node node, List<Dancer> list) {
+  private List<Dancer> inOrderContents(Node node, List<Dancer> list) {
     if (node == null) {
       return list;
     }
@@ -698,31 +623,31 @@ public class BinaryTree {
     requests.add(new DancerImpl("M", MALE, 9999));
     responds.add(160);
 
-    requests.add(new DancerImpl("M", MALE, 9999));
-    responds.add(155);
-
-    requests.add(new DancerImpl("M", MALE, 9999));
-    responds.add(150);
-
-    requests.add(new DancerImpl("M", MALE, 9999));
-    responds.add(130);
-
-    requests.add(new DancerImpl("M", MALE, 9999));
-    responds.add(128);
-
-    requests.add(new DancerImpl("M", MALE, 9999));
-    responds.add(120);
-
-    requests.add(new DancerImpl("M", MALE, 9999));
-    responds.add(109);
-    requests.add(new DancerImpl("M", MALE, 9999));
-    responds.add(98);
-    requests.add(new DancerImpl("M", MALE, 9999));
-    responds.add(95);
-    requests.add(new DancerImpl("M", MALE, 9999));
-    responds.add(93);
-    requests.add(new DancerImpl("M", MALE, 9999));
-    responds.add(90);
+//    requests.add(new DancerImpl("M", MALE, 9999));
+//    responds.add(155);
+//
+//    requests.add(new DancerImpl("M", MALE, 9999));
+//    responds.add(150);
+//
+//    requests.add(new DancerImpl("M", MALE, 9999));
+//    responds.add(130);
+//
+//    requests.add(new DancerImpl("M", MALE, 9999));
+//    responds.add(128);
+//
+//    requests.add(new DancerImpl("M", MALE, 9999));
+//    responds.add(120);
+//
+//    requests.add(new DancerImpl("M", MALE, 9999));
+//    responds.add(109);
+//    requests.add(new DancerImpl("M", MALE, 9999));
+//    responds.add(98);
+//    requests.add(new DancerImpl("M", MALE, 9999));
+//    responds.add(95);
+//    requests.add(new DancerImpl("M", MALE, 9999));
+//    responds.add(93);
+//    requests.add(new DancerImpl("M", MALE, 9999));
+//    responds.add(90);
 
 
 
@@ -742,18 +667,33 @@ public class BinaryTree {
     for (int i = 0; i < requests.size(); i++) {
       testRequestResponse(solution, requests.get(i), responds.get(i));
       System.out.println(solution.femaleTree.toString());
+      System.out.println(solution.maleTree.toString());
+      System.out.println("I asked for partner to " + requests.get(i));
+      System.out.println("I expected " + responds.get(i));
+      System.out.println("-------------------------------------------------------------------------");
     }
-    System.out.println(solution.femaleTree.toString());
-    BinaryTree femaleTree = solution.femaleTree;
-    if (femaleTree.root != null) {
-      System.out.println(solution.femaleTree.root.rightHeight);
-      System.out.println(solution.femaleTree.root.leftHeight);
 
-    }
-    System.out.println(solution.returnWaitingList());
-    System.out.println("female tree root is null? " + (femaleTree.root == null));
+
   }
 
+
+  public static void testCustom() throws Exception {
+      List<Dancer> requests = new ArrayList<>();
+      List<Integer> responds = new ArrayList<>();
+      Random RANDOM = new Random();
+      HW01 solution = new HW01();
+      for (int i = 0; i < 10000; i++) {
+          Dancer dancer = new DancerImpl("Dab", RANDOM.nextBoolean() ? MALE : FEMALE, 1 + RANDOM.nextInt(100000));
+          requests.add(dancer);
+          DancingCouple couple = solution.findPartnerFor(dancer);
+          responds.add(couple == null ? null : couple.getFemaleDancer() == dancer ? couple.getMaleDancer().getHeight() : couple.getFemaleDancer().getHeight());
+          System.out.println(solution.femaleTree.toString());
+          System.out.println(solution.maleTree.toString());
+      }
+      System.out.println(solution.femaleTree.toString());
+      System.out.println(solution.maleTree.toString());
+      testTreeEndToEnd(requests, responds);
+  }
 
   private static void testRequestResponse(HW01 solution, Dancer dancer, Integer expectedPartnerHeight) {
 
@@ -775,10 +715,11 @@ public class BinaryTree {
       }
     }
   }
-  public static void main(String[] args) {
-//    testMaleTreeEndToEndPublic();
-    testFemaleTreeEndToEndPublic();
 
+  public static void main(String[] args) throws Exception {
+//    testMaleTreeEndToEndPublic();
+//    testFemaleTreeEndToEndPublic();
+    testCustom();
 
 //    System.out.println(tree.contains(7));
 //    System.out.println(tree.contains(11));

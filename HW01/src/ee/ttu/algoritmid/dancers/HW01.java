@@ -30,25 +30,26 @@ public class HW01 implements Dancers {
         maleTree.add(dancer.getHeight(), dancer);
         return null;
       }
-      couple = new DancingCoupleImpl(dancer, potentialNode.getDancers().get(0));
+      couple = new DancingCoupleImpl(dancer, potentialNode.getDancers().remove(0));
+      System.out.println("I instead gave " + couple.getFemaleDancer().getHeight());
     } else {
       potentialNode = maleTree.findMoreOrEqual(dancer.getHeight() + 5);
       if (potentialNode == null) {
         femaleTree.add(dancer.getHeight(), dancer);
         return null;
       }
-      couple = new DancingCoupleImpl(potentialNode.getDancers().get(0), dancer);
+      couple = new DancingCoupleImpl(potentialNode.getDancers().remove(0), dancer);
+      System.out.println("I instead gave " + couple.getMaleDancer().getHeight());
+
     }
-    System.out.println("LENGTH BEFORE REMOVAL " + potentialNode.getDancers().size());
-    potentialNode.getDancers().remove(0);
-    if (potentialNode.getDancers().size() == 0) {
+    if (potentialNode.getDancers().isEmpty()) {
+      System.out.println("I SHOULD HAVE REMOOOVED AN ELEMENTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
       if (fromFemale) {
         femaleTree.deleteNode(potentialNode);
       } else {
         maleTree.deleteNode(potentialNode);
       }
     }
-    System.out.println("LENGTH AFTER REMOVAL " + potentialNode.getDancers().size());
     return couple;
   }
 

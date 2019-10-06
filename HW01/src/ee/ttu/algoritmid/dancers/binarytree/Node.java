@@ -34,45 +34,13 @@ public class Node {
       right.printTree(new StringBuilder().append(prefix).append(isTail ? "│   " : "    "), false, sb);
     }
 
-    sb.append(prefix).append(isTail ? "└── " : "┌── ").append(value + " " + leftHeight + " " + rightHeight).append("\n");
+    sb.append(prefix).append(isTail ? "└── " : "┌── ").append(value + " " + leftHeight + " " + rightHeight + " " + dancers.toString() + ((parent == null) ? "null" : parent.value)).append("\n");
 
     if(left != null) {
       left.printTree(new StringBuilder().append(prefix).append(isTail ? "    " : "│   "), true, sb);
     }
 
     return sb;
-  }
-
-  public Node getLeft() {
-    return left;
-  }
-
-  public void setLeft(Node left) {
-    this.left = left;
-  }
-
-  public Node getRight() {
-    return right;
-  }
-
-  public void setRight(Node right) {
-    this.right = right;
-  }
-
-  public Node getParent() {
-    return parent;
-  }
-
-  public void setParent(Node parent) {
-    this.parent = parent;
-  }
-
-  public void addDancer(Dancer dancer) {
-    dancers.add(dancer);
-  }
-
-  public int getValue() {
-    return value;
   }
 
   public List<Dancer> getDancers() {
