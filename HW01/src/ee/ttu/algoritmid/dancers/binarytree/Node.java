@@ -9,16 +9,20 @@ public class Node {
 
   int value;
   List<Dancer> dancers;
+  int leftHeight;
+  int rightHeight;
   Node left;
   Node right;
   Node parent;
 
-  public Node(int value, Node parent) {
+  Node(int value, Node parent) {
     this.value = value;
     this.dancers = new ArrayList<>();
     this.parent = parent;
     this.left = null;
     this.right = null;
+    this.leftHeight = 0;
+    this.rightHeight = 0;
   }
 
   /**
@@ -37,38 +41,6 @@ public class Node {
     }
 
     return sb;
-  }
-
-  public Node getLeft() {
-    return left;
-  }
-
-  public void setLeft(Node left) {
-    this.left = left;
-  }
-
-  public Node getRight() {
-    return right;
-  }
-
-  public void setRight(Node right) {
-    this.right = right;
-  }
-
-  public Node getParent() {
-    return parent;
-  }
-
-  public void setParent(Node parent) {
-    this.parent = parent;
-  }
-
-  public void addDancer(Dancer dancer) {
-    dancers.add(dancer);
-  }
-
-  public int getValue() {
-    return value;
   }
 
   public List<Dancer> getDancers() {

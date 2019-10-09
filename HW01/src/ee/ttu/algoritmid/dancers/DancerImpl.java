@@ -29,4 +29,9 @@ public class DancerImpl implements Dancer {
   public int getHeight() {
     return height;
   }
+
+  @Override
+  public String toString() {
+    return height + " " + gender;
+  }
 }
