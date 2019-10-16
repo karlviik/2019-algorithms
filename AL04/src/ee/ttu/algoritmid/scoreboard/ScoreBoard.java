@@ -22,4 +22,13 @@ public class ScoreBoard {
     public List<Participant> get(int n) {
         return pq.stream().limit(n).collect(Collectors.toList());
     }
+
+//    public static void main(String[] args) {
+//        ScoreBoard sb = new ScoreBoard();
+//        sb.add(new Participant(3, "aefa", 1));
+//        sb.add(new Participant(2, "aefa", 1));
+//        System.out.println(sb.get(2));
+//        System.out.println(sb.get(2));
+//
+//    }
 }
