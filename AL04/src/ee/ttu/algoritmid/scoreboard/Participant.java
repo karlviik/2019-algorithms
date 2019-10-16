@@ -35,8 +35,8 @@ public class Participant {
         this.time = time;
     }
 
-    @Override
-    public String toString() {
-        return id + " " + time;
-    }
+//    @Override
+//    public String toString() {
+//        return id + " " + time;
+//    }
 }
