@@ -20,6 +20,6 @@ public class ScoreBoard {
      * This method will be queried by the tests every time a new participant is added
      */
     public List<Participant> get(int n) {
-        return pq.stream().limit(n).collect(Collectors.toList());
+        return pq.stream().limit(n).sorted(Comparator.comparing(Participant::getTime).thenComparing(Participant::getId)).collect(Collectors.toList());
     }
 }
