@@ -9,7 +9,7 @@ public class ScoreBoard {
 
     private PriorityQueue<Participant> pq = new PriorityQueue<>(Comparator.comparing(Participant::getTime));
     /**
-     * Adds a participant's time to the checkpoint scoreboard
+     * Adds a participant'ssss time to the checkpoint scoreboard
      */
     public void add(Participant participant) {
         pq.add(participant);
