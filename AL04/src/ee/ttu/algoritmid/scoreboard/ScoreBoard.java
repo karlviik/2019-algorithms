@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class ScoreBoard {
 
-    private PriorityQueue<Participant> pq = new PriorityQueue<>(Comparator.comparing(Participant::getTime));
+    private PriorityQueue<Participant> pq = new PriorityQueue<>(Comparator.comparing(Participant::getTime).thenComparing(Participant::getId));
     /**
      * Adds a participant'ssss time to the checkpoint scoreboard
      */
@@ -20,6 +20,6 @@ public class ScoreBoard {
      * This method will be queried by the tests every time a new participant is added
      */
     public List<Participant> get(int n) {
-        return pq.stream().limit(n).sorted(Comparator.comparing(Participant::getTime).thenComparing(Participant::getId)).collect(Collectors.toList());
+        return pq.stream().limit(n).collect(Collectors.toList());
     }
 }
