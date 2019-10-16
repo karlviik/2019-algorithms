@@ -12,7 +12,7 @@ import java.util.stream.StreamSupport;
 
 public class ScoreBoard {
 
-    private TreeSet<Participant> pq = new TreeSet<>(Comparator.comparing(Participant::getTime, Comparator.reverseOrder()).thenComparing(Participant::getId));
+    private TreeSet<Participant> pq = new TreeSet<>(Comparator.comparing(Participant::getTime).thenComparing(Participant::getId));
     /**
      * Adds a participant'ssss time to the checkpoint scoreboard
      */
