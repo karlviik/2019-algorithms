@@ -34,4 +34,9 @@ public class Participant {
     public void setTime(int time) {
         this.time = time;
     }
+
+    @Override
+    public String toString() {
+        return id + " " + time;
+    }
 }
