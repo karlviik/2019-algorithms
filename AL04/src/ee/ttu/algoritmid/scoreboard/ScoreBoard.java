@@ -25,9 +25,7 @@ public class ScoreBoard {
      * This method will be queried by the tests every time a new participant is added
      */
     public List<Participant> get(int n) {
-        return StreamSupport.stream(
-            Spliterators.spliteratorUnknownSize(pq.iterator(), Spliterator.ORDERED),
-            false).limit(n).collect(Collectors.toList());
+        return pq.stream().limit(n).collect(Collectors.toList());
     }
 
 //    public static void main(String[] args) {
