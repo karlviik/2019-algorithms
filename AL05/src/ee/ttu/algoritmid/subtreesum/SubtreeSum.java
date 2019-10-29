@@ -11,17 +11,19 @@ public class SubtreeSum {
   public Node calculateLeftSums(Node rootNode) {
 
     if (rootNode == null) {
-      return rootNode;
+      return null;
     }
-    if (rootNode.getLeft() != null) {
-      calculateLeftSums(rootNode.getLeft());
-      rootNode.setSumOfAllLeft(rootNode.getLeft().getSumOfAllChildren() + rootNode.getLeft().getValue());
+    Node left = rootNode.getLeft();
+    Node right = rootNode.getRight();
+    if (left != null) {
+      calculateLeftSums(left);
+      rootNode.setSumOfAllLeft(left.getSumOfAllChildren() + left.getValue());
     } else {
       rootNode.setSumOfAllLeft(0);
     }
-    if (rootNode.getRight() != null) {
-      calculateLeftSums(rootNode.getRight());
-      rootNode.setSumOfAllChildren(rootNode.getSumOfAllLeft() + rootNode.getRight().getSumOfAllChildren() + rootNode.getRight().getValue());
+    if (right != null) {
+      calculateLeftSums(right);
+      rootNode.setSumOfAllChildren(rootNode.getSumOfAllLeft() + right.getSumOfAllChildren() + right.getValue());
     } else {
       rootNode.setSumOfAllChildren(rootNode.getSumOfAllLeft());
     }
