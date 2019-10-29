@@ -13,20 +13,17 @@ public class SubtreeSum {
     if (rootNode == null) {
       return null;
     }
-    Node left = rootNode.getLeft();
-    Node right = rootNode.getRight();
+    Node left = calculateLeftSums(rootNode.getLeft());
+    Node right = calculateLeftSums(rootNode.getRight());
+    long sum = 0;
     if (left != null) {
-      calculateLeftSums(left);
-      rootNode.setSumOfAllLeft(left.getSumOfAllChildren() + left.getValue());
-    } else {
-      rootNode.setSumOfAllLeft(0);
+      sum = left.getSumOfAllChildren() + left.getValue();
     }
+    rootNode.setSumOfAllLeft(sum);
     if (right != null) {
-      calculateLeftSums(right);
-      rootNode.setSumOfAllChildren(rootNode.getSumOfAllLeft() + right.getSumOfAllChildren() + right.getValue());
-    } else {
-      rootNode.setSumOfAllChildren(rootNode.getSumOfAllLeft());
+      sum += right.getSumOfAllChildren() + right.getValue();
     }
+    rootNode.setSumOfAllChildren(sum);
 
     return rootNode;
   }
