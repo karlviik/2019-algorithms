@@ -10,21 +10,12 @@ public class SubtreeSum {
    */
   public Node calculateLeftSums(Node rootNode) {
 
-    if (rootNode == null) {
-      return null;
-    }
+    if (rootNode == null) return null;
     Node left = calculateLeftSums(rootNode.getLeft());
     Node right = calculateLeftSums(rootNode.getRight());
-    long sum = 0;
-    if (left != null) {
-      sum = left.getSumOfAllChildren() + left.getValue();
-    }
+    long sum = left != null ? left.getSumOfAllChildren() + left.getValue() : 0;
     rootNode.setSumOfAllLeft(sum);
-    if (right != null) {
-      sum += right.getSumOfAllChildren() + right.getValue();
-    }
-    rootNode.setSumOfAllChildren(sum);
-
+    rootNode.setSumOfAllChildren(sum + (right != null ? right.getSumOfAllChildren() + right.getValue() : 0));
     return rootNode;
   }
 
