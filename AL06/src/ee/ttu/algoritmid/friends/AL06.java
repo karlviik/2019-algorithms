@@ -94,7 +94,7 @@ public class AL06 {
 				}
 				return new SimpleEntry<Integer, List<Integer>>(path.size(), path);
 			}
-			return new SimpleEntry<>(null, null);
+			return null;
 		}
 	}
 
