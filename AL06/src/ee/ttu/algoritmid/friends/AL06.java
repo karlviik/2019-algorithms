@@ -58,13 +58,12 @@ public class AL06 {
 		 */
 		public SimpleEntry<Integer, List<Integer>> breadthFirstSearch(Integer start, Integer goal) {
 
-			Map<Integer, Character> label = new HashMap<>();
-			Map<Integer, Integer> distance = new HashMap<>();
+			Map<Integer, Boolean> label = new HashMap<>();
 			Map<Integer, Integer> parent = new HashMap<>();
 			for (Map.Entry<Integer, List<Integer>> entry : graph.entrySet()) {
-				label.put(entry.getKey(), 'n');
-				distance.put(entry.getKey(), Integer.MAX_VALUE);
-				parent.put(entry.getKey(), null);
+				Integer key = entry.getKey();
+				label.put(key, false);
+				parent.put(key, null);
 			}
 			Deque<Integer> queue = new ArrayDeque<>();
 			queue.add(start);
@@ -75,14 +74,13 @@ public class AL06 {
 					break;
 				}
 				for (Integer neighbour : graph.get(current)) {
-					if (label.get(neighbour) == 'n') {
-						label.put(neighbour, 'c');
-						distance.put(neighbour, distance.get(current) + 1);
+					if (!label.get(neighbour)) {
+						label.put(neighbour, true);
 						parent.put(neighbour, current);
 						queue.add(neighbour);
 					}
 				}
-				label.put(current, 'v');
+				label.put(current, true);
 			}
 			if (current.equals(goal)) {
 				LinkedList<Integer> path = new LinkedList<>();
