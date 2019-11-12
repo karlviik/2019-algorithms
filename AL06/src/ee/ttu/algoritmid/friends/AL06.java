@@ -70,14 +70,16 @@ public class AL06 {
 			Integer current = Integer.MAX_VALUE;
 			while (!queue.isEmpty()) {
 				current = queue.removeFirst();
-				if (current.equals(goal)) {
-					break;
-				}
 				for (Integer neighbour : graph.get(current)) {
 					if (!label.get(neighbour)) {
 						label.put(neighbour, true);
 						parent.put(neighbour, current);
 						queue.add(neighbour);
+						if (neighbour.equals(goal)) {
+							current = neighbour;
+							queue.clear();
+							break;
+						}
 					}
 				}
 				label.put(current, true);
@@ -90,7 +92,7 @@ public class AL06 {
 					path.addFirst(curParent);
 					curParent = parent.get(curParent);
 				}
-				return new SimpleEntry<Integer, List<Integer>>(path.size(), path);
+				return new SimpleEntry<>(path.size(), path);
 			}
 			return null;
 		}
