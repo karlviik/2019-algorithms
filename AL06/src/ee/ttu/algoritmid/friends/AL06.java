@@ -57,11 +57,12 @@ public class AL06 {
 		 *                    (some tests only check for number of nodes)
 		 */
 		public SimpleEntry<Integer, List<Integer>> breadthFirstSearch(Integer start, Integer goal) {
-
+			if (start.equals(goal)) {
+				return new SimpleEntry<>(1, new ArrayList<>(goal));
+			}
 			Map<Integer, Boolean> label = new HashMap<>();
 			Map<Integer, Integer> parent = new HashMap<>();
-			for (Map.Entry<Integer, List<Integer>> entry : graph.entrySet()) {
-				Integer key = entry.getKey();
+			for (Integer key : graph.keySet()) {
 				label.put(key, false);
 				parent.put(key, null);
 			}
