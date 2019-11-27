@@ -19,9 +19,12 @@ public class InterestingStamps {
 			options = new ArrayList<>();
 			for (int mark : stampOptions) {
 				if (mark < i) {
+					int sub = i - mark;
+					if (subtaskis[sub] == 0) {
+						continue;
+					}
 					int[] option = new int[3];
 					option[0] = mark; // value of the mark chosen
-					int sub = i - mark;
 					option[1] = amountofmarks[sub] + 1; // amount of marks in new thing
 					int simple = amountofsimplemarks[sub];
 					if (mark == 1 || mark % 10 == 0) {
@@ -36,7 +39,7 @@ public class InterestingStamps {
 					}
 					options = new ArrayList<>();
 					amountofmarks[i] = 1;
-//					subtaskis[i] = -1;
+					subtaskis[i] = -1;
 					break;
 				}
 			}
@@ -63,6 +66,9 @@ public class InterestingStamps {
 					return answer;
 				}
 				int subtask = subtaskis[index];
+				if (subtask == -1) {
+					subtask = 0;
+				}
 				answer.add(index - subtask);
 				index = subtask;
 			}
