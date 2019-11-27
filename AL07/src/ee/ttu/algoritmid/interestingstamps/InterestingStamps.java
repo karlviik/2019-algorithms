@@ -1,15 +1,15 @@
 package ee.ttu.algoritmid.interestingstamps;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class InterestingStamps {
 
 	public static List<Integer> findStamps(int sum, List<Integer> stampOptions) throws IllegalArgumentException {
-		if (sum < 0 || stampOptions == null) {
+		if (sum < 0 || stampOptions == null || stampOptions.size() == 0) {
 			throw new IllegalArgumentException();
+		}
+		if (sum == 0) {
+			return new ArrayList<>();
 		}
 		int[] subtaskis = new int[sum+1];
 		int[] amountofmarks = new int[sum+1];
@@ -36,7 +36,7 @@ public class InterestingStamps {
 					}
 					options = new ArrayList<>();
 					amountofmarks[i] = 1;
-					subtaskis[i] = -1;
+//					subtaskis[i] = -1;
 					break;
 				}
 			}
@@ -46,22 +46,33 @@ public class InterestingStamps {
 					int[] thing = best.get();
 					amountofmarks[i] = thing[1];
 					amountofsimplemarks[i] = thing[2];
-					subtaskis[i] = i - thing[1];
+					subtaskis[i] = i - thing[0];
 				}
 			}
 		}
+//		System.out.println(Arrays.toString(subtaskis));
+//		System.out.println(subtaskis[66]);
+//		System.out.println(subtaskis[33]);
+//		System.out.println(Arrays.toString(amountofmarks));
+//		System.out.println(Arrays.toString(amountofsimplemarks));
 		if (subtaskis[sum] != 0) {
 			ArrayList<Integer> answer = new ArrayList<>();
 			int index = sum;
 			while (true) {
-				int subtask = sum - subtaskis[index];
-				if (subtask == 0) {
+				if (index <= 0) {
 					return answer;
 				}
-				answer.add(subtask);
+				int subtask = subtaskis[index];
+				answer.add(index - subtask);
 				index = subtask;
 			}
 		}
 		return null;
+	}
+
+	public static void main(String[] args) {
+		ArrayList<Integer> marks = new ArrayList<>(Arrays.asList(1,10,24,30,33,36));
+		int target = 100;
+		System.out.println(findStamps(target, marks).toString());
 	}
 }
