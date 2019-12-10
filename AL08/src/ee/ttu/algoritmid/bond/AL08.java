@@ -9,7 +9,8 @@ public class AL08 {
 	private DisjointSubsets disjointSubsets = new DisjointSubsets();
 
 	public AL08() {
-		// don't remove
+		disjointSubsets.addSubset("A");
+		disjointSubsets.addSubset("U");
 	}
 
 	public DisjointSubsets getDisjointSubsets() {
